@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -27,16 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cached
-import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.RemoveRedEye
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -64,7 +56,11 @@ import java.util.concurrent.Executors
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { AppTheme { UltimateApp() } }
+        setContent {
+            AppTheme {
+                UltimateApp()
+            }
+        }
     }
 }
 
@@ -558,54 +554,4 @@ private fun SettingsSheet(
                 SectionTitle("فایل صدا")
                 Spacer(Modifier.height(8.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Button(onClick = { audioPicker.launch(arrayOf("audio/*")) }) {
-                        Icon(Icons.Filled.MusicNote, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("انتخاب صدا")
-                    }
-                    OutlinedButton(onClick = onClearAudio, enabled = currentAudioName != null) {
-                        Text("حذف")
-                    }
-                }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    currentAudioName?.let { "فایل: $it" } ?: "هنوز صدایی انتخاب نشده",
-                    color = Color.White.copy(alpha = 0.78f)
-                )
-
-                Spacer(Modifier.height(18.dp))
-                Text(
-                    "نسخه Ultimate روی UI حرفه‌ای‌تر، مصرف کمتر CPU و پایایی بیشتر تشخیص تنظیم شده است.",
-                    color = Color.White.copy(alpha = 0.72f)
-                )
-
-                Spacer(Modifier.height(14.dp))
-                Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
-                    Text("بستن پنل")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun SectionTitle(title: String) {
-    Text(title, color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
-}
-
-private fun displayName(context: android.content.Context, uri: Uri): String? {
-    return try {
-        context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-            val idx = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-            if (idx >= 0 && cursor.moveToFirst()) cursor.getString(idx) else uri.lastPathSegment
-        } ?: uri.lastPathSegment
-    } catch (_: Throwable) {
-        uri.lastPathSegment
-    }
-}
-
-private fun persistPermission(context: android.content.Context, uri: Uri) {
-    try {
-        context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    } catch (_: Throwable) { }
-}
+                    Button(onClic
